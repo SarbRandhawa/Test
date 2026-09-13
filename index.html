@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Frame — Photography Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7f6',
+                            100: '#e3eae7',
+                            500: '#1a3636',
+                            800: '#0f2222',
+                            900: '#091515',
+                            accent: '#d4af37' // Gold accent
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Custom scrollbar & smooth transitions */
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(150,150,150,0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(150,150,150,0.6); }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100 font-sans transition-colors duration-300 min-h-screen flex flex-col justify-between selection:bg-amber-400 selection:text-stone-900">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-md border-b border-stone-200 dark:border-stone-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#" onclick="switchTab('home')" class="flex items-center gap-3 group">
+                <span class="w-10 h-10 rounded-full bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 flex items-center justify-center font-serif text-xl font-bold transition-transform group-hover:scale-105">
+                    A
+                </span>
+                <div>
+                    <span class="font-serif text-xl font-bold tracking-wider block leading-none">AURA FRAME</span>
+                    <span class="text-[10px] tracking-widest text-amber-600 dark:text-amber-400 uppercase font-medium">Fine Art Visuals</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Items -->
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-full text-sm font-medium transition-all">Home</button>
+                <button onclick="switchTab('portfolio')" id="nav-portfolio" class="nav-btn px-4 py-2 rounded-full text-sm font-medium transition-all">Portfolio</button>
+                <button onclick="switchTab('about')" id="nav-about" class="nav-btn px-4 py-2 rounded-full text-sm font-medium transition-all">About Me</button>
+                <button onclick="switchTab('services')" id="nav-services" class="nav-btn px-4 py-2 rounded-full text-sm font-medium transition-all">Services & Pricing</button>
+                <button onclick="switchTab('contact')" id="nav-contact" class="nav-btn px-4 py-2 rounded-full text-sm font-medium transition-all">Contact</button>
+            </nav>
+
+            <!-- Actions (Theme Toggle & Mobile Menu Btn) -->
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2.5 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-600 dark:text-stone-300 transition-colors" title="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden text-lg"></i>
+                    <i class="fa-solid fa-sun hidden dark:block text-lg"></i>
+                </button>
+                
+                <button onclick="switchTab('contact')" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-xs font-semibold tracking-wider text-stone-900 bg-amber-400 hover:bg-amber-300 rounded-full transition-transform active:scale-95 shadow-md">
+                    BOOK NOW
+                </button>
+
+                <!-- Mobile Hamburger Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-stone-700 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-800 focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-100 dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 px-4 pt-2 pb-6 space-y-2">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium hover:bg-stone-200 dark:hover:bg-stone-800">Home</button>
+            <button onclick="switchTab('portfolio'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium hover:bg-stone-200 dark:hover:bg-stone-800">Portfolio</button>
+            <button onclick="switchTab('about'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium hover:bg-stone-200 dark:hover:bg-stone-800">About Me</button>
+            <button onclick="switchTab('services'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium hover:bg-stone-200 dark:hover:bg-stone-800">Services & Pricing</button>
+            <button onclick="switchTab('contact'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium hover:bg-stone-200 dark:hover:bg-stone-800">Contact</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow pt-20">
+
+        <!-- ================= PAGE 1: HOME ================= -->
+        <section id="page-home" class="page-content fade-in">
+            <!-- Hero Carousel Banner -->
+            <div class="relative h-[85vh] min-h-[550px] overflow-hidden bg-stone-950">
+                <!-- Slides -->
+                <div id="hero-slider" class="absolute inset-0 transition-opacity duration-1000">
+                    <!-- Background images managed via JS -->
+                    <div id="hero-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-105" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-black/30"></div>
+                </div>
+
+                <!-- Hero Content Overlay -->
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end pb-16 lg:pb-24 z-10 text-white">
+                    <p class="text-amber-400 font-mono text-sm tracking-widest uppercase mb-3">Award-Winning Fine Art & Editorial Photographer</p>
+                    <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight max-w-3xl leading-tight mb-6" id="hero-title">
+                        Capturing Silence Between Beats.
+                    </h1>
+                    <p class="text-stone-300 text-base sm:text-lg max-w-xl mb-8 leading-relaxed" id="hero-subtitle">
+                        Specializing in emotive portraits, dramatic landscapes, and intimate wedding stories across the globe.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="switchTab('portfolio')" class="px-8 py-3.5 bg-amber-400 text-stone-950 font-semibold rounded-full hover:bg-amber-300 transition-transform active:scale-95 shadow-lg">
+                            Explore Works <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                        </button>
+                        <button onclick="switchTab('contact')" class="px-8 py-3.5 border border-white/30 backdrop-blur-sm text-white font-medium rounded-full hover:bg-white/10 transition-colors">
+                            Get In Touch
+                        </button>
+                    </div>
+
+                    <!-- Slide controls indicator -->
+                    <div class="absolute bottom-8 right-6 sm:right-12 flex items-center gap-3">
+                        <button onclick="prevHeroSlide()" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fa-solid fa-chevron-left text-sm"></i>
+                        </button>
+                        <span id="hero-slide-num" class="text-xs font-mono tracking-widest px-2">01 / 03</span>
+                        <button onclick="nextHeroSlide()" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <i class="fa-solid fa-chevron-right text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Intro Section -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-b border-stone-200 dark:border-stone-800">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Philosophical Approach</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-2 mb-6">"Every photograph is a dynamic pause button on life."</h2>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed mb-4">
+                            With over 12 years behind the lens, I focus on authentic visual storytelling. Whether high in the Norwegian fjords or capturing stolen glances on a wedding day, my aim remains identical: unvarnished truth paired with poetic composition.
+                        </p>
+                        <a href="#" onclick="switchTab('about')" class="inline-flex items-center text-sm font-semibold text-stone-900 dark:text-stone-100 hover:text-amber-500 dark:hover:text-amber-400 transition-colors">
+                            Read Full Biography <i class="fa-solid fa-arrow-right-long ml-2"></i>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Portrait Sample" class="w-full h-64 object-cover rounded-2xl shadow-md hover:opacity-95 transition-opacity">
+                            <div class="p-6 bg-stone-100 dark:bg-stone-900 rounded-2xl text-center">
+                                <span class="block text-3xl font-serif font-bold text-amber-500">12+</span>
+                                <span class="text-xs text-stone-500 dark:text-stone-400 uppercase font-medium">Years Experience</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4 pt-8">
+                            <div class="p-6 bg-stone-100 dark:bg-stone-900 rounded-2xl text-center">
+                                <span class="block text-3xl font-serif font-bold text-amber-500">250+</span>
+                                <span class="text-xs text-stone-500 dark:text-stone-400 uppercase font-medium">Projects Done</span>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Wedding Sample" class="w-full h-64 object-cover rounded-2xl shadow-md hover:opacity-95 transition-opacity">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Highlights Grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12">
+                    <div>
+                        <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Selected Works</span>
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold mt-1">Featured Highlights</h2>
+                    </div>
+                    <button onclick="switchTab('portfolio')" class="mt-4 sm:mt-0 text-sm font-medium hover:text-amber-500 transition-colors">
+                        View All Categories &rarr;
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Highlight 1 -->
+                    <div class="group cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80', 'The Craftsman', 'Portraiture')">
+                        <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-stone-800">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="Highlight 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                                <span class="text-xs font-mono text-amber-400 uppercase">Portraiture</span>
+                                <h3 class="font-serif text-xl font-semibold">The Craftsman</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Highlight 2 -->
+                    <div class="group cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80', 'Elegance in Dusk', 'Weddings')">
+                        <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-stone-800">
+                            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="Highlight 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                                <span class="text-xs font-mono text-amber-400 uppercase">Weddings</span>
+                                <h3 class="font-serif text-xl font-semibold">Elegance in Dusk</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Highlight 3 -->
+                    <div class="group cursor-pointer" onclick="openLightbox('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80', 'Highland Whispers', 'Landscapes')">
+                        <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-stone-800">
+                            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Highlight 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-white">
+                                <span class="text-xs font-mono text-amber-400 uppercase">Landscapes</span>
+                                <h3 class="font-serif text-xl font-semibold">Highland Whispers</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 2: PORTFOLIO / GALLERY ================= -->
+        <section id="page-portfolio" class="page-content hidden fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Gallery Header -->
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Curated Collections</span>
+                    <h1 class="font-serif text-4xl sm:text-5xl font-bold mt-2 mb-4">Portfolio Gallery</h1>
+                    <p class="text-stone-600 dark:text-stone-400">Explore visual stories categorized by atmosphere, intent, and style.</p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
+                    <button onclick="filterGallery('all')" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-medium transition-all bg-amber-400 text-stone-950" data-filter="all">All Works</button>
+                    <button onclick="filterGallery('portraits')" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-medium transition-all bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300" data-filter="portraits">Portraits</button>
+                    <button onclick="filterGallery('landscapes')" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-medium transition-all bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300" data-filter="landscapes">Landscapes</button>
+                    <button onclick="filterGallery('weddings')" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-medium transition-all bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300" data-filter="weddings">Weddings</button>
+                    <button onclick="filterGallery('street')" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-medium transition-all bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300" data-filter="street">Street & Urban</button>
+                </div>
+
+                <!-- Gallery Masonry/Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery-grid">
+                    
+                    <!-- Item 1: Portraits -->
+                    <div class="gallery-item portraits group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80', 'Aura of Serenity', 'Portraits')">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="Portraits" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">PORTRAITS</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Aura of Serenity</h3>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: Landscapes -->
+                    <div class="gallery-item landscapes group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80', 'Valley Lights', 'Landscapes')">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Landscapes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">LANDSCAPES</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Valley Lights</h3>
+                        </div>
+                    </div>
+
+                    <!-- Item 3: Weddings -->
+                    <div class="gallery-item weddings group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80', 'Eternal Vows', 'Weddings')">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Weddings" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">WEDDINGS</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Eternal Vows</h3>
+                        </div>
+                    </div>
+
+                    <!-- Item 4: Street -->
+                    <div class="gallery-item street group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1477959858617-67f30ac7261e?auto=format&fit=crop&w=1200&q=80', 'Metropolis Shadows', 'Street')">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f30ac7261e?auto=format&fit=crop&w=800&q=80" alt="Street" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">STREET</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Metropolis Shadows</h3>
+                        </div>
+                    </div>
+
+                    <!-- Item 5: Portraits -->
+                    <div class="gallery-item portraits group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1200&q=80', 'Natural Expression', 'Portraits')">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80" alt="Portraits" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">PORTRAITS</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Natural Expression</h3>
+                        </div>
+                    </div>
+
+                    <!-- Item 6: Landscapes -->
+                    <div class="gallery-item landscapes group relative overflow-hidden rounded-2xl bg-stone-900 cursor-pointer aspect-square" onclick="openLightbox('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80', 'Mist & Pines', 'Landscapes')">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80" alt="Landscapes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-stone-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                            <span class="text-xs font-mono text-amber-400">LANDSCAPES</span>
+                            <h3 class="font-serif text-xl font-bold text-white">Mist & Pines</h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: ABOUT ME ================= -->
+        <section id="page-about" class="page-content hidden fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Bio & Photo -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
+                    <div class="lg:col-span-5">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?auto=format&fit=crop&w=1000&q=80" alt="Photographer portrait" class="w-full h-[500px] object-cover rounded-3xl shadow-xl">
+                            <div class="absolute -bottom-6 -right-6 hidden sm:block bg-amber-400 text-stone-950 p-6 rounded-2xl max-w-xs shadow-lg">
+                                <p class="font-serif font-bold text-lg">"Light is my paintbrush, emotion is my canvas."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 space-y-6">
+                        <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Behind The Lens</span>
+                        <h1 class="font-serif text-4xl sm:text-5xl font-bold leading-tight">Hi, I'm Julian Vance</h1>
+                        <p class="text-stone-600 dark:text-stone-300 text-lg leading-relaxed">
+                            Based in Vancouver but available worldwide, I am a fine-art photographer dedicated to capturing the raw, unscripted beauty of human connection and natural environments.
+                        </p>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed">
+                            Over the last decade, my work has been featured in National Geographic, Vogue Editorial, and numerous international exhibitions. My philosophy is grounded in minimalism—eliminating visual noise to let authentic emotion radiate.
+                        </p>
+                        
+                        <div class="pt-4 flex flex-wrap gap-8 border-t border-stone-200 dark:border-stone-800">
+                            <div>
+                                <span class="block text-2xl font-serif font-bold">Location</span>
+                                <span class="text-sm text-stone-500 dark:text-stone-400">Vancouver / Worldwide</span>
+                            </div>
+                            <div>
+                                <span class="block text-2xl font-serif font-bold">Specialty</span>
+                                <span class="text-sm text-stone-500 dark:text-stone-400">Portraits & Landscapes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gear List & Equipment -->
+                <div class="mb-20 bg-stone-100 dark:bg-stone-900/60 rounded-3xl p-8 sm:p-12 border border-stone-200 dark:border-stone-800">
+                    <h2 class="font-serif text-3xl font-bold mb-8 text-center sm:text-left">Camera Gear & Equipment</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-amber-500">
+                                <i class="fa-solid fa-camera text-xl"></i>
+                                <h3 class="font-bold text-stone-900 dark:text-stone-100 text-lg">Bodies</h3>
+                            </div>
+                            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+                                <li>• Leica SL2 Mirrorless</li>
+                                <li>• Sony Alpha A1 Digital Cinema</li>
+                                <li>• Hasselblad 500C/M (Medium Format Film)</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-amber-500">
+                                <i class="fa-solid fa-[#000] fa-circle-notch text-xl"></i>
+                                <h3 class="font-bold text-stone-900 dark:text-stone-100 text-lg">Lenses</h3>
+                            </div>
+                            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+                                <li>• Leica Summicron-SL 35mm f/2 ASPH</li>
+                                <li>• Sony FE 50mm f/1.2 GM</li>
+                                <li>• Sony FE 85mm f/1.4 GM</li>
+                                <li>• Canon FD 55mm f/1.2 Vintage</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-3 text-amber-500">
+                                <i class="fa-solid fa-lightbulb text-xl"></i>
+                                <h3 class="font-bold text-stone-900 dark:text-stone-100 text-lg">Lighting & Accessories</h3>
+                            </div>
+                            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+                                <li>• Profoto B10X Plus Strobes</li>
+                                <li>• Peak Design Carbon Fiber Tripods</li>
+                                <li>• DJI Mavic 3 Pro Cine Drone</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Client Logos & Testimonials -->
+                <div class="space-y-12">
+                    <div class="text-center">
+                        <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Testimonials</span>
+                        <h2 class="font-serif text-3xl font-bold mt-1">What Clients Say</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="p-8 bg-stone-100 dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800">
+                            <div class="flex items-center gap-1 text-amber-400 mb-4 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="italic text-stone-600 dark:text-stone-300 mb-6">"Julian captured our destination wedding in Tuscany with breathtaking artfulness. Looking through our album feels like reliving a cinematic romance movie."</p>
+                            <div>
+                                <span class="font-bold block">Elena & Marcus Vance</span>
+                                <span class="text-xs text-stone-500">Wedding Clients</span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 bg-stone-100 dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800">
+                            <div class="flex items-center gap-1 text-amber-400 mb-4 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="italic text-stone-600 dark:text-stone-300 mb-6">"Julian's commercial editorial work for our brand refresh exceeded every expectation. He has an innate eye for tone, texture, and brand elegance."</p>
+                            <div>
+                                <span class="font-bold block">Sophia Chen</span>
+                                <span class="text-xs text-stone-500">Creative Director, Apex Magazine</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: SERVICES & PRICING ================= -->
+        <section id="page-services" class="page-content hidden fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Investment</span>
+                    <h1 class="font-serif text-4xl sm:text-5xl font-bold mt-2 mb-4">Packages & Pricing</h1>
+                    <p class="text-stone-600 dark:text-stone-400">Transparent pricing for memorable stories. Custom packages are also available upon request.</p>
+                </div>
+
+                <!-- Pricing Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                    
+                    <!-- Tier 1 -->
+                    <div class="p-8 rounded-3xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col justify-between hover:border-amber-400 transition-colors">
+                        <div>
+                            <span class="text-xs font-mono text-amber-500 uppercase">Essential</span>
+                            <h3 class="font-serif text-2xl font-bold mt-1 mb-4">Portrait Session</h3>
+                            <div class="text-4xl font-serif font-bold mb-6">$650 <span class="text-sm font-sans font-normal text-stone-500">/ session</span></div>
+                            <ul class="space-y-3 text-sm text-stone-600 dark:text-stone-300 mb-8">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> 2 Hours of coverage</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> 1 Outdoor location</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> 30 High-res retouched images</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Online private gallery</li>
+                                <li class="flex items-center gap-2 text-stone-400 dark:text-stone-600"><i class="fa-solid fa-xmark"></i> Print release rights</li>
+                            </ul>
+                        </div>
+                        <button onclick="switchTab('contact')" class="w-full py-3 rounded-full border border-stone-900 dark:border-stone-100 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-100 dark:hover:text-stone-900 transition-colors text-sm font-semibold">Book Portrait Session</button>
+                    </div>
+
+                    <!-- Tier 2 (Highlighted) -->
+                    <div class="p-8 rounded-3xl bg-stone-900 text-white border-2 border-amber-400 relative flex flex-col justify-between shadow-2xl scale-105">
+                        <span class="absolute -top-3.5 right-6 bg-amber-400 text-stone-950 text-[10px] font-bold tracking-widest px-3 py-1 rounded-full uppercase">Most Popular</span>
+                        <div>
+                            <span class="text-xs font-mono text-amber-400 uppercase">Full Story</span>
+                            <h3 class="font-serif text-2xl font-bold mt-1 mb-4">Wedding Experience</h3>
+                            <div class="text-4xl font-serif font-bold mb-6">$3,800 <span class="text-sm font-sans font-normal text-stone-400">/ event</span></div>
+                            <ul class="space-y-3 text-sm text-stone-300 mb-8">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Full day coverage (up to 10 hrs)</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Second photographer included</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> 500+ High-res edited photos</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Complimentary engagement shoot</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i> Premium photo book album</li>
+                            </ul>
+                        </div>
+                        <button onclick="switchTab('contact')" class="w-full py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold transition-colors text-sm">Reserve Date</button>
+                    </div>
+
+                    <!-- Tier 3 -->
+                    <div class="p-8 rounded-3xl bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 flex flex-col justify-between hover:border-amber-400 transition-colors">
+                        <div>
+                            <span class="text-xs font-mono text-amber-500 uppercase">Commercial</span>
+                            <h3 class="font-serif text-2xl font-bold mt-1 mb-4">Editorial & Brand</h3>
+                            <div class="text-4xl font-serif font-bold mb-6">$1,800 <span class="text-sm font-sans font-normal text-stone-500">/ day</span></div>
+                            <ul class="space-y-3 text-sm text-stone-600 dark:text-stone-300 mb-8">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Full day studio/location session</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Full commercial usage license</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Color grading & beauty retouching</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Fast 48-hour turnarounds</li>
+                            </ul>
+                        </div>
+                        <button onclick="switchTab('contact')" class="w-full py-3 rounded-full border border-stone-900 dark:border-stone-100 hover:bg-stone-900 hover:text-white dark:hover:bg-stone-100 dark:hover:text-stone-900 transition-colors text-sm font-semibold">Inquire Commercial</button>
+                    </div>
+
+                </div>
+
+                <!-- FAQ Accordion Section -->
+                <div class="max-w-3xl mx-auto space-y-6">
+                    <h2 class="font-serif text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                    
+                    <div class="border border-stone-200 dark:border-stone-800 rounded-2xl p-6 bg-stone-100 dark:bg-stone-900">
+                        <h4 class="font-bold text-lg mb-2">How far in advance should we book?</h4>
+                        <p class="text-stone-600 dark:text-stone-400 text-sm">For weddings, we recommend booking 8 to 12 months in advance. Portrait sessions generally require 2-3 weeks notice.</p>
+                    </div>
+                    <div class="border border-stone-200 dark:border-stone-800 rounded-2xl p-6 bg-stone-100 dark:bg-stone-900">
+                        <h4 class="font-bold text-lg mb-2">Do you travel internationally?</h4>
+                        <p class="text-stone-600 dark:text-stone-400 text-sm">Yes, destination sessions are very common for our team. Travel rates are calculated transparently with minimal overhead costs.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= PAGE 5: CONTACT ================= -->
+        <section id="page-contact" class="page-content hidden fade-in py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    
+                    <!-- Contact Info Column -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <div>
+                            <span class="text-xs font-semibold tracking-widest text-amber-600 dark:text-amber-400 uppercase">Let's Connect</span>
+                            <h1 class="font-serif text-4xl font-bold mt-2 mb-4">Book Your Session</h1>
+                            <p class="text-stone-600 dark:text-stone-400">Fill out the inquiry form or reach out directly via email to discuss your upcoming project or event.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4 p-4 rounded-xl bg-stone-100 dark:bg-stone-900">
+                                <i class="fa-solid fa-envelope text-amber-500 text-xl mt-1"></i>
+                                <div>
+                                    <span class="text-xs text-stone-500 uppercase block font-semibold">Direct Email</span>
+                                    <span class="font-medium">julian@auraframephoto.com</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-xl bg-stone-100 dark:bg-stone-900">
+                                <i class="fa-solid fa-location-dot text-amber-500 text-xl mt-1"></i>
+                                <div>
+                                    <span class="text-xs text-stone-500 uppercase block font-semibold">Studio Address</span>
+                                    <span class="font-medium">1088 Gastown District, Vancouver, BC</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div>
+                            <h4 class="text-sm font-semibold uppercase tracking-wider text-stone-500 mb-4">Follow On Socials</h4>
+                            <div class="flex gap-4">
+                                <a href="#" class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center hover:bg-amber-400 hover:text-stone-950 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center hover:bg-amber-400 hover:text-stone-950 transition-colors"><i class="fa-brands fa-pinterest"></i></a>
+                                <a href="#" class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center hover:bg-amber-400 hover:text-stone-950 transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Form Column -->
+                    <div class="lg:col-span-7 bg-stone-100 dark:bg-stone-900 p-8 sm:p-10 rounded-3xl border border-stone-200 dark:border-stone-800">
+                        <form id="booking-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 text-stone-600 dark:text-stone-400">Your Name *</label>
+                                    <input type="text" required class="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-800 focus:outline-none focus:border-amber-400 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 text-stone-600 dark:text-stone-400">Email Address *</label>
+                                    <input type="email" required class="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-800 focus:outline-none focus:border-amber-400 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 text-stone-600 dark:text-stone-400">Session Type</label>
+                                    <select class="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-800 focus:outline-none focus:border-amber-400 text-sm">
+                                        <option value="portrait">Portrait Session</option>
+                                        <option value="wedding">Wedding / Event</option>
+                                        <option value="landscape">Landscape / Commercial</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold uppercase tracking-wider mb-2 text-stone-600 dark:text-stone-400">Desired Date</label>
+                                    <input type="date" class="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-800 focus:outline-none focus:border-amber-400 text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider mb-2 text-stone-600 dark:text-stone-400">Project Details / Vision</label>
+                                <textarea rows="4" required placeholder="Tell me about your location, inspiration, or event vision..." class="w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-stone-950 border border-stone-300 dark:border-stone-800 focus:outline-none focus:border-amber-400 text-sm"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 bg-amber-400 hover:bg-amber-300 text-stone-950 font-bold rounded-xl transition-all shadow-lg active:scale-98">
+                                Send Inquiry
+                            </button>
+                        </form>
+
+                        <!-- Success Alert Message (hidden by default) -->
+                        <div id="form-success" class="hidden mt-6 p-4 bg-emerald-500/10 border border-emerald-500 text-emerald-500 rounded-xl text-center text-sm font-medium">
+                            <i class="fa-solid fa-circle-check mr-2"></i> Thank you! Your booking inquiry has been received. I will reply within 24 hours.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LIGHTBOX MODAL -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-stone-950/90 backdrop-blur-md hidden flex flex-col justify-center items-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-stone-400 hover:text-white text-3xl transition-colors">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="max-w-4xl max-h-[80vh] overflow-hidden rounded-xl">
+            <img id="lightbox-img" src="" alt="Full preview" class="max-h-[75vh] w-auto object-contain mx-auto rounded-lg">
+            <div class="text-center mt-4">
+                <span id="lightbox-tag" class="text-xs font-mono text-amber-400 uppercase"></span>
+                <h3 id="lightbox-caption" class="font-serif text-2xl font-bold text-white"></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-100 dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 py-10 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-center sm:text-left">
+                <span class="font-serif font-bold text-lg">AURA FRAME</span>
+                <p class="text-xs text-stone-500">© 2026 Julian Vance Photography. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6 text-xs text-stone-500">
+                <button onclick="switchTab('home')" class="hover:text-amber-500">Home</button>
+                <button onclick="switchTab('portfolio')" class="hover:text-amber-500">Portfolio</button>
+                <button onclick="switchTab('about')" class="hover:text-amber-500">About</button>
+                <button onclick="switchTab('services')" class="hover:text-amber-500">Services</button>
+                <button onclick="switchTab('contact')" class="hover:text-amber-500">Contact</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Hero Slider Data & State
+        const heroSlides = [
+            {
+                img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80',
+                title: 'Capturing Silence Between Beats.',
+                subtitle: 'Specializing in emotive portraits, dramatic landscapes, and intimate wedding stories across the globe.'
+            },
+            {
+                img: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=2000&q=80',
+                title: 'Timeless Stories Written in Light.',
+                subtitle: 'Documenting modern romantic vows with elegance, detail, and genuine emotion.'
+            },
+            {
+                img: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=80',
+                title: 'Unspoiled Wilderness & Atmosphere.',
+                subtitle: 'Fine art prints capturing high-altitude landscapes in their rawest forms.'
+            }
+        ];
+        let currentSlide = 0;
+
+        function updateHeroSlide() {
+            const bg = document.getElementById('hero-bg');
+            const title = document.getElementById('hero-title');
+            const subtitle = document.getElementById('hero-subtitle');
+            const num = document.getElementById('hero-slide-num');
+
+            if(bg && title && subtitle && num) {
+                bg.style.backgroundImage = `url('${heroSlides[currentSlide].img}')`;
+                title.innerText = heroSlides[currentSlide].title;
+                subtitle.innerText = heroSlides[currentSlide].subtitle;
+                num.innerText = `0${currentSlide + 1} / 0${heroSlides.length}`;
+            }
+        }
+
+        function nextHeroSlide() {
+            currentSlide = (currentSlide + 1) % heroSlides.length;
+            updateHeroSlide();
+        }
+
+        function prevHeroSlide() {
+            currentSlide = (currentSlide - 1 + heroSlides.length) % heroSlides.length;
+            updateHeroSlide();
+        }
+
+        // Tab Switching Logic (SPA Architecture)
+        function switchTab(tabId) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show active page
+            const target = document.getElementById(`page-${tabId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update Navigation Button styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-400', 'text-stone-950');
+                btn.classList.add('text-stone-600', 'dark:text-stone-300');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-stone-600', 'dark:text-stone-300');
+                activeBtn.classList.add('bg-amber-400', 'text-stone-950');
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Light/Dark Theme Toggle
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // Portfolio Filtering logic
+        function filterGallery(category) {
+            // Update button styles
+            document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.remove('bg-stone-200', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
+                    btn.classList.add('bg-amber-400', 'text-stone-950');
+                } else {
+                    btn.classList.remove('bg-amber-400', 'text-stone-950');
+                    btn.classList.add('bg-stone-200', 'dark:bg-stone-800', 'text-stone-700', 'dark:text-stone-300');
+                }
+            });
+
+            // Filter Grid Items
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // Lightbox Modal functions
+        function openLightbox(imgSrc, title, tag) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox-caption').innerText = title;
+            document.getElementById('lightbox-tag').innerText = tag;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        // Form Submit simulation
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const successMsg = document.getElementById('form-success');
+            const form = document.getElementById('booking-form');
+            successMsg.classList.remove('hidden');
+            form.reset();
+        }
+
+        // Initialize default active state on page load
+        window.onload = function() {
+            switchTab('home');
+        };
+    </script>
+</body>
+</html>
